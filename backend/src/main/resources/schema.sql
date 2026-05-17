@@ -35,5 +35,23 @@ CREATE TABLE IF NOT EXISTS chat_messages (
     FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_characters_model_config_id ON characters(model_config_id);
-CREATE INDEX idx_chat_messages_character_id ON chat_messages(character_id);
+-- Idempotent index creation (MySQL 5.7/8 compatible)
+SET @sql_char_idx = IF(
+    (SELECT COUNT(*) FROM information_schema.statistics
+     WHERE table_schema = DATABASE() AND table_name = 'characters' AND index_name = 'idx_characters_model_config_id') = 0,
+    'CREATE INDEX idx_characters_model_config_id ON characters(model_config_id)',
+    'SELECT 1'
+);
+PREPARE stmt FROM @sql_char_idx;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @sql_chat_idx = IF(
+    (SELECT COUNT(*) FROM information_schema.statistics
+     WHERE table_schema = DATABASE() AND table_name = 'chat_messages' AND index_name = 'idx_chat_messages_character_id') = 0,
+    'CREATE INDEX idx_chat_messages_character_id ON chat_messages(character_id)',
+    'SELECT 1'
+);
+PREPARE stmt FROM @sql_chat_idx;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
