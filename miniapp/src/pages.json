@@ -1,6 +1,12 @@
 {
     "pages": [
         {
+            "path": "pages/models/model-form",
+            "style": {
+                "navigationBarTitleText": "模型配置"
+            }
+        },
+        {
             "path": "pages/characters/characters",
             "style": {
                 "navigationBarTitleText": "角色"
