@@ -1,6 +1,7 @@
 package com.aitavern.service;
 
 import com.aitavern.config.AppConfig;
+import com.aitavern.entity.AvatarImage;
 import com.aitavern.entity.CharacterEntity;
 import com.aitavern.entity.ModelConfig;
 import com.aitavern.repository.CharacterRepository;
@@ -9,11 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 public class CharacterService {
@@ -22,13 +20,16 @@ public class CharacterService {
     private final ModelConfigRepository modelRepo;
     private final CharacterCardParser parser;
     private final AppConfig appConfig;
+    private final AvatarService avatarService;
 
     public CharacterService(CharacterRepository repo, ModelConfigRepository modelRepo,
-                            CharacterCardParser parser, AppConfig appConfig) {
+                            CharacterCardParser parser, AppConfig appConfig,
+                            AvatarService avatarService) {
         this.repo = repo;
         this.modelRepo = modelRepo;
         this.parser = parser;
         this.appConfig = appConfig;
+        this.avatarService = avatarService;
     }
 
     public List<CharacterEntity> list() {
@@ -53,10 +54,8 @@ public class CharacterService {
         character.setMesExample(f.get("mes_example"));
 
         if (result.avatarBytes() != null) {
-            String filename = UUID.randomUUID() + ".png";
-            Path dest = Path.of(appConfig.getUploadDir(), filename);
-            Files.write(dest, result.avatarBytes());
-            character.setAvatarPath("/uploads/avatars/" + filename);
+            AvatarImage avatar = avatarService.store(result.avatarBytes(), "image/png");
+            character.setAvatarId(avatar.getId());
         }
 
         if (modelConfigId != null) {

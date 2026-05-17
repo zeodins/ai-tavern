@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS model_configs (
 CREATE TABLE IF NOT EXISTS characters (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    avatar_path VARCHAR(500) DEFAULT '',
+    avatar_id VARCHAR(64) DEFAULT '',
     description TEXT,
     personality TEXT,
     first_message TEXT,

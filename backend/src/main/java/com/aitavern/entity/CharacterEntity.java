@@ -14,8 +14,8 @@ public class CharacterEntity {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(name = "avatar_path", length = 500)
-    private String avatarPath = "";
+    @Column(name = "avatar_id", length = 64)
+    private String avatarId = "";
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -63,8 +63,8 @@ public class CharacterEntity {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public String getAvatarPath() { return avatarPath; }
-    public void setAvatarPath(String avatarPath) { this.avatarPath = avatarPath; }
+    public String getAvatarId() { return avatarId; }
+    public void setAvatarId(String avatarId) { this.avatarId = avatarId; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }

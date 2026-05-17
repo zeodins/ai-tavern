@@ -15,7 +15,7 @@
       :key="char.id"
       :name="char.name"
       :description="char.description"
-      :avatar="char.avatarPath"
+      :avatar="getAvatarUrl(char)"
       @click="goToChat(char)"
       @longpress="confirmDelete(char)"
     />
@@ -28,7 +28,16 @@ import CharacterCard from '@/components/CharacterCard.vue'
 import { listCharacters, importCharacter, deleteCharacter } from '@/api/character'
 import { listModels } from '@/api/model'
 
+const BASE_URL = 'http://localhost:8080'
+
 const characters = ref([])
+
+function getAvatarUrl(char) {
+  if (char.avatarId) {
+    return BASE_URL + '/api/avatars/' + char.avatarId
+  }
+  return ''
+}
 
 onMounted(() => {
   loadCharacters()

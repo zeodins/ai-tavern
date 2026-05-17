@@ -18,6 +18,9 @@ spring:
     init:
       mode: always
       schema-locations: classpath:schema.sql
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/ai_tavern
   servlet:
     multipart:
       max-file-size: 10MB
