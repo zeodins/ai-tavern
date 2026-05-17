@@ -43,6 +43,12 @@
             }
         },
         {
+            "path": "pages/characters/character-edit",
+            "style": {
+                "navigationBarTitleText": "编辑角色"
+            }
+        },
+        {
             "path": "pages/models/models",
             "style": {
                 "navigationBarTitleText": "模型"

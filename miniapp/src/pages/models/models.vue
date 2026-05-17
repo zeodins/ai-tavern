@@ -19,13 +19,17 @@
         <button size="mini" @click="openForm(item)">编辑</button>
         <button size="mini" type="warn" @click="handleDelete(item.id)">删除</button>
       </view>
+      <view class="active-bar">
+        <text v-if="item.isActive" class="active-badge">● 当前使用</text>
+        <button v-else class="activate-btn" size="mini" @click="handleActivate(item.id)">启用</button>
+      </view>
     </view>
   </view>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { listModels, deleteModel } from '@/api/model'
+import { listModels, deleteModel, activateModel } from '@/api/model'
 
 const models = ref([])
 
@@ -54,6 +58,16 @@ async function handleDelete(id) {
     loadModels()
   }
 }
+
+async function handleActivate(id) {
+  try {
+    await activateModel(id)
+    uni.showToast({ title: '已启用', icon: 'success' })
+    loadModels()
+  } catch (e) {
+    uni.showToast({ title: '操作失败', icon: 'none' })
+  }
+}
 </script>
 
 <style scoped>
@@ -68,4 +82,7 @@ async function handleDelete(id) {
 .model-info { display: block; font-size: 13px; color: #92A69E; margin-bottom: 4px; }
 .model-url { display: block; font-size: 12px; color: #B0C3BA; }
 .card-actions { display: flex; gap: 8px; margin-top: 12px; }
+.active-bar { display: flex; align-items: center; margin-top: 8px; }
+.active-badge { font-size: 12px; color: #7CB9A8; font-weight: 500; }
+.activate-btn { background: transparent; color: #7CB9A8; border: 1px solid #7CB9A8; border-radius: 12px; padding: 2px 10px; font-size: 11px; }
 </style>

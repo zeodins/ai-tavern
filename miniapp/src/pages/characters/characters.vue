@@ -22,7 +22,7 @@
       :description="char.description"
       :avatar="getAvatarUrl(char)"
       @click="goToChat(char)"
-      @longpress="confirmDelete(char)"
+      @longpress="showCharMenu(char)"
     />
   </view>
 </template>
@@ -104,6 +104,19 @@ async function handleImport() {
 
 function goToChat(char) {
   uni.navigateTo({ url: `/pages/chat/chat?characterId=${char.id}&characterName=${encodeURIComponent(char.name)}` })
+}
+
+function showCharMenu(char) {
+  uni.showActionSheet({
+    itemList: ['编辑', '删除'],
+    success: (res) => {
+      if (res.tapIndex === 0) {
+        uni.navigateTo({ url: `/pages/characters/character-edit?id=${char.id}` })
+      } else if (res.tapIndex === 1) {
+        confirmDelete(char)
+      }
+    }
+  })
 }
 
 async function confirmDelete(char) {
