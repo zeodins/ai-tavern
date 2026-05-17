@@ -53,6 +53,12 @@
             "style": {
                 "navigationBarTitleText": "模型"
             }
+        },
+        {
+            "path": "pages/settings/settings",
+            "style": {
+                "navigationBarTitleText": "设置"
+            }
         }
     ],
     "tabBar": {

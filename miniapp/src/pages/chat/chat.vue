@@ -1,12 +1,12 @@
 <template>
   <view class="page-container" :style="bgStyle">
-    <view class="chat-overlay">
-      <view class="top-bar">
-        <text class="char-name">{{ characterName }}</text>
+    <view class="chat-overlay" :style="overlayStyle">
+      <view class="top-bar" :style="topBarStyle">
+        <text class="char-name" :style="{ color: theme.text }">{{ characterName }}</text>
       </view>
 
       <scroll-view class="message-list" scroll-y :scroll-into-view="scrollTarget" :scroll-with-animation="true">
-        <view v-if="messages.length === 0 && !assistantTyping" class="empty-chat">
+        <view v-if="messages.length === 0 && !assistantTyping" :style="emptyChatStyle" class="empty-chat">
           <text>开始和 {{ characterName }} 对话吧</text>
         </view>
 
@@ -22,14 +22,14 @@
       </scroll-view>
 
       <!-- AI Suggestions -->
-      <view v-if="suggestions.length > 0 && !assistantTyping" class="suggestions-bar">
-        <text v-for="(s, i) in suggestions" :key="i" class="suggestion-chip" @click="useSuggestion(s)">{{ s }}</text>
+      <view v-if="suggestions.length > 0 && !assistantTyping" :style="suggestionsBarStyle" class="suggestions-bar">
+        <text v-for="(s, i) in suggestions" :key="i" :style="suggestionChipStyle" class="suggestion-chip" @click="useSuggestion(s)">{{ s }}</text>
       </view>
 
-      <view class="input-bar">
-        <input class="msg-input" v-model="inputText" placeholder="输入消息..." :disabled="assistantTyping"
+      <view class="input-bar" :style="inputBarStyle">
+        <input class="msg-input" :style="inputStyle" v-model="inputText" placeholder="输入消息..." :disabled="assistantTyping"
           confirm-type="send" @confirm="handleSend" />
-        <button class="send-btn" :disabled="!inputText.trim() || assistantTyping" @click="handleSend" size="mini">发送</button>
+        <button class="send-btn" :style="sendBtnStyle" :disabled="!inputText.trim() || assistantTyping" @click="handleSend" size="mini">发送</button>
       </view>
     </view>
   </view>
@@ -37,7 +37,8 @@
 
 <script setup>
 import { ref, nextTick, computed } from 'vue'
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad, onShow } from '@dcloudio/uni-app'
+import { getCurrentTheme } from '@/theme'
 import ChatBubble from '@/components/ChatBubble.vue'
 import { sendMessage, getHistory, regenerateMessage, getSuggestions } from '@/api/chat'
 import { getCharacter } from '@/api/character'
@@ -51,6 +52,37 @@ const streamingText = ref('')
 const scrollTarget = ref('')
 const suggestions = ref([])
 const backgroundId = ref('')
+
+const theme = ref(getCurrentTheme())
+const overlayStyle = computed(() => ({
+  background: theme.value.primaryBg,
+}))
+const topBarStyle = computed(() => ({
+  background: theme.value.white,
+  borderBottom: '1px solid ' + theme.value.border,
+}))
+const suggestionsBarStyle = computed(() => ({
+  background: theme.value.white,
+}))
+const suggestionChipStyle = computed(() => ({
+  background: theme.value.primary,
+  color: '#fff',
+}))
+const inputBarStyle = computed(() => ({
+  background: theme.value.white,
+  borderTop: '1px solid ' + theme.value.border,
+}))
+const inputStyle = computed(() => ({
+  border: '1px solid ' + theme.value.border,
+  background: theme.value.bg,
+}))
+const sendBtnStyle = computed(() => ({
+  background: theme.value.primary,
+  color: '#fff',
+}))
+const emptyChatStyle = computed(() => ({
+  color: theme.value.textLight,
+}))
 
 const BASE_URL = 'http://localhost:8080'
 
@@ -68,6 +100,10 @@ onLoad((query) => {
   characterName.value = query.characterName || ''
   loadCharacterInfo()
   loadHistory()
+})
+
+onShow(() => {
+  theme.value = getCurrentTheme()
 })
 
 async function loadCharacterInfo() {

@@ -2,7 +2,10 @@
   <view class="container">
     <view class="header">
       <text class="title">我的角色</text>
-      <button class="add-btn" @click="handleImport" size="mini">+ 导入</button>
+      <view style="display:flex;align-items:center;gap:6px">
+        <button class="settings-btn" @click="goToSettings" size="mini">&#9881;</button>
+        <button class="add-btn" @click="handleImport" size="mini">+ 导入</button>
+      </view>
     </view>
 
     <view v-if="allTags.length > 0" class="tag-bar">
@@ -106,6 +109,10 @@ function goToChat(char) {
   uni.navigateTo({ url: `/pages/chat/chat?characterId=${char.id}&characterName=${encodeURIComponent(char.name)}` })
 }
 
+function goToSettings() {
+  uni.navigateTo({ url: '/pages/settings/settings' })
+}
+
 function showCharMenu(char) {
   uni.showActionSheet({
     itemList: ['编辑', '删除'],
@@ -137,6 +144,7 @@ async function confirmDelete(char) {
 .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .title { font-size: 20px; font-weight: bold; }
 .add-btn { background-color: #7CB9A8; color: #fff; border: none; }
+.settings-btn { background: transparent; border: none; font-size: 20px; padding: 0 4px; color: #92A69E; }
 .empty { text-align: center; padding: 60px 0; color: #B0C3BA; }
 .empty-icon { font-size: 48px; display: block; margin-bottom: 10px; }
 .tag-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
