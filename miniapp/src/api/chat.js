@@ -1,40 +1,24 @@
+import request from './request'
+
+const BASE_URL = 'http://localhost:8080/api'
+
 export function getHistory(characterId) {
-  return new Promise((resolve, reject) => {
-    uni.request({
-      url: `http://localhost:8080/api/chat/${characterId}`,
-      method: 'GET',
-      success: (res) => {
-        if (res.statusCode >= 200 && res.statusCode < 300) {
-          resolve(res.data)
-        } else {
-          reject(new Error(res.data?.message || `HTTP ${res.statusCode}`))
-        }
-      },
-      fail: (err) => reject(err)
-    })
+  return request({
+    url: `/chat/${characterId}`,
+    method: 'GET'
   })
 }
 
 export function clearHistory(characterId) {
-  return new Promise((resolve, reject) => {
-    uni.request({
-      url: `http://localhost:8080/api/chat/${characterId}`,
-      method: 'DELETE',
-      success: (res) => {
-        if (res.statusCode >= 200 && res.statusCode < 300) {
-          resolve(res.data)
-        } else {
-          reject(new Error(res.data?.message || `HTTP ${res.statusCode}`))
-        }
-      },
-      fail: (err) => reject(err)
-    })
+  return request({
+    url: `/chat/${characterId}`,
+    method: 'DELETE'
   })
 }
 
 export function sendMessage(characterId, message, modelConfigId, onChunk, onDone, onError) {
   const task = uni.request({
-    url: 'http://localhost:8080/api/chat',
+    url: BASE_URL + '/chat',
     method: 'POST',
     enableChunked: true,
     data: { characterId, message, modelConfigId },
@@ -45,6 +29,7 @@ export function sendMessage(characterId, message, modelConfigId, onChunk, onDone
   })
 
   let buffer = ''
+  let errorFlag = false
 
   task.onChunkReceived((chunk) => {
     const text = new TextDecoder().decode(chunk.data)
@@ -57,8 +42,21 @@ export function sendMessage(characterId, message, modelConfigId, onChunk, onDone
       if (line.startsWith('event:chunk')) {
         continue
       }
+      if (line.startsWith('event:error')) {
+        errorFlag = true
+        continue
+      }
+      if (line.startsWith('event:done')) {
+        if (onDone) onDone()
+        continue
+      }
       if (line.startsWith('data:')) {
         const data = line.substring(5).trim()
+        if (errorFlag) {
+          errorFlag = false
+          if (onError) onError(new Error(data || 'Stream error'))
+          continue
+        }
         if (!data) continue
         try {
           const parsed = JSON.parse(data)
@@ -72,10 +70,6 @@ export function sendMessage(characterId, message, modelConfigId, onChunk, onDone
         } catch {
           onChunk(data)
         }
-      } else if (line.startsWith('event:done')) {
-        if (onDone) onDone()
-      } else if (line.startsWith('event:error')) {
-        if (onError) onError(new Error('Stream error'))
       }
     }
   })

@@ -24,6 +24,6 @@ spring:
       max-request-size: 10MB
   web:
     resources:
-      static-locations: file:./uploads/
+      static-locations: file:./
 app:
   upload-dir: ${user.home}/ai-tavern/uploads/avatars

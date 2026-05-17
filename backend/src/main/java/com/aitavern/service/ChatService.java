@@ -68,7 +68,6 @@ public class ChatService {
         userMsg.setCharacter(character);
         userMsg.setRole("user");
         userMsg.setContent(userMessage);
-        messageRepo.save(userMsg);
 
         executor.execute(() -> {
             try {
@@ -139,6 +138,7 @@ public class ChatService {
                     assistantMsg.setRole("assistant");
                     assistantMsg.setContent(fullContent.toString());
                     messageRepo.save(assistantMsg);
+                    messageRepo.save(userMsg);
                 }
 
                 emitter.send(SseEmitter.event().name("done").data(""));
