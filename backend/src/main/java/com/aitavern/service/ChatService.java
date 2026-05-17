@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -182,6 +183,89 @@ public class ChatService {
         });
 
         return emitter;
+    }
+
+    public SseEmitter regenerate(Long characterId, Long modelConfigId) {
+        // Find and delete last assistant message
+        Optional<ChatMessage> lastAssistant = messageRepo.findTopByCharacter_IdAndRoleOrderByCreatedAtDesc(characterId, "assistant");
+        if (lastAssistant.isPresent()) {
+            messageRepo.delete(lastAssistant.get());
+        }
+
+        // Find last user message
+        Optional<ChatMessage> lastUser = messageRepo.findTopByCharacter_IdAndRoleOrderByCreatedAtDesc(characterId, "user");
+        if (lastUser.isEmpty()) {
+            SseEmitter emitter = new SseEmitter();
+            emitter.completeWithError(new RuntimeException("No user message to regenerate from"));
+            return emitter;
+        }
+
+        // Reuse the chat method, which already includes lorebook/authorNote injection
+        return chat(characterId, lastUser.get().getContent(), modelConfigId);
+    }
+
+    public List<String> suggest(Long characterId) {
+        CharacterEntity character = characterRepo.findById(characterId)
+                .orElseThrow(() -> new RuntimeException("Character not found"));
+
+        ModelConfig modelConfig = character.getModelConfig();
+        if (modelConfig == null) {
+            return List.of("请先为角色配置模型", "然后再获取建议", "在模型管理中添加配置");
+        }
+
+        try {
+            List<Map<String, String>> messages = buildMessages(character);
+            // Add the last user message if it exists
+            Optional<ChatMessage> lastUser = messageRepo.findTopByCharacter_IdAndRoleOrderByCreatedAtDesc(characterId, "user");
+            if (lastUser.isPresent()) {
+                messages.add(Map.of("role", "user", "content", lastUser.get().getContent()));
+            }
+            messages.add(Map.of("role", "system", "content",
+                "Based on the conversation context, generate 3 short, distinct reply suggestions (under 30 characters each) that the user could send next. Return ONLY the 3 suggestions, each on a new line starting with '- '."));
+
+            String requestBody = objectMapper.writeValueAsString(Map.of(
+                "model", modelConfig.getModelName(),
+                "temperature", 0.9,
+                "max_tokens", 200,
+                "stream", false,
+                "messages", messages
+            ));
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(modelConfig.getApiBaseUrl() + "/v1/chat/completions"))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + modelConfig.getApiKey())
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                return List.of("获取建议失败", "请检查模型配置", "或网络连接");
+            }
+
+            JsonNode root = objectMapper.readTree(response.body());
+            String text = root.get("choices").get(0).get("message").get("content").asText();
+
+            // Parse: each suggestion starts with "- "
+            List<String> suggestions = new ArrayList<>();
+            for (String line : text.split("\n")) {
+                String trimmed = line.trim();
+                if (trimmed.startsWith("- ")) {
+                    String suggestion = trimmed.substring(2).trim();
+                    if (suggestion.length() > 60) {
+                        suggestion = suggestion.substring(0, 60);
+                    }
+                    if (!suggestion.isEmpty()) {
+                        suggestions.add(suggestion);
+                    }
+                }
+            }
+
+            return suggestions.isEmpty() ? List.of("获取建议失败", "请重试", "或检查模型配置") : suggestions;
+        } catch (Exception e) {
+            return List.of("获取建议失败", e.getMessage() != null ? e.getMessage().substring(0, Math.min(e.getMessage().length(), 30)) : "未知错误", "请重试");
+        }
     }
 
     private List<Map<String, String>> buildMessages(CharacterEntity character) {

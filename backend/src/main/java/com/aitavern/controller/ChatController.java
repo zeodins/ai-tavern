@@ -36,4 +36,17 @@ public class ChatController {
     public void clearHistory(@PathVariable Long characterId) {
         service.clearHistory(characterId);
     }
+
+    @PostMapping("/regenerate")
+    public SseEmitter regenerate(@RequestBody Map<String, Object> body) {
+        Long characterId = Long.valueOf(body.get("characterId").toString());
+        Long modelConfigId = body.containsKey("modelConfigId") && body.get("modelConfigId") != null
+                ? Long.valueOf(body.get("modelConfigId").toString()) : null;
+        return service.regenerate(characterId, modelConfigId);
+    }
+
+    @PostMapping("/{characterId}/suggestions")
+    public List<String> getSuggestions(@PathVariable Long characterId) {
+        return service.suggest(characterId);
+    }
 }
