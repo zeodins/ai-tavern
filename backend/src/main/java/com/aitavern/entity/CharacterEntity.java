@@ -35,6 +35,15 @@ public class CharacterEntity {
     @Column(name = "mes_example", columnDefinition = "TEXT")
     private String mesExample;
 
+    @Column(length = 500)
+    private String tags = "";
+
+    @Column(name = "author_note", columnDefinition = "TEXT")
+    private String authorNote;
+
+    @Column(name = "background_id", length = 64)
+    private String backgroundId = "";
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "model_config_id")
     private ModelConfig modelConfig;
@@ -83,6 +92,15 @@ public class CharacterEntity {
 
     public String getMesExample() { return mesExample; }
     public void setMesExample(String mesExample) { this.mesExample = mesExample; }
+
+    public String getTags() { return tags; }
+    public void setTags(String tags) { this.tags = tags; }
+
+    public String getAuthorNote() { return authorNote; }
+    public void setAuthorNote(String authorNote) { this.authorNote = authorNote; }
+
+    public String getBackgroundId() { return backgroundId; }
+    public void setBackgroundId(String backgroundId) { this.backgroundId = backgroundId; }
 
     public ModelConfig getModelConfig() { return modelConfig; }
     public void setModelConfig(ModelConfig modelConfig) { this.modelConfig = modelConfig; }

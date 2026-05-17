@@ -55,3 +55,31 @@ SET @sql_chat_idx = IF(
 PREPARE stmt FROM @sql_chat_idx;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
+
+-- Add new columns to characters table (idempotent)
+SET @sql_tags = IF(
+    (SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = 'characters' AND column_name = 'tags') = 0,
+    'ALTER TABLE characters ADD COLUMN tags VARCHAR(500) DEFAULT \'\' AFTER model_config_id',
+    'SELECT 1'
+);
+PREPARE stmt FROM @sql_tags;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @sql_author_note = IF(
+    (SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = 'characters' AND column_name = 'author_note') = 0,
+    'ALTER TABLE characters ADD COLUMN author_note TEXT AFTER tags',
+    'SELECT 1'
+);
+PREPARE stmt FROM @sql_author_note;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @sql_bg_id = IF(
+    (SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = 'characters' AND column_name = 'background_id') = 0,
+    'ALTER TABLE characters ADD COLUMN background_id VARCHAR(64) DEFAULT \'\' AFTER author_note',
+    'SELECT 1'
+);
+PREPARE stmt FROM @sql_bg_id;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;

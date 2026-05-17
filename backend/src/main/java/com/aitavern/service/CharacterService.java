@@ -76,6 +76,9 @@ public class CharacterService {
         existing.setScenario(updated.getScenario());
         existing.setSystemPrompt(updated.getSystemPrompt());
         existing.setMesExample(updated.getMesExample());
+        existing.setTags(updated.getTags());
+        existing.setAuthorNote(updated.getAuthorNote());
+        existing.setBackgroundId(updated.getBackgroundId());
         if (updated.getModelConfig() != null && updated.getModelConfig().getId() != null) {
             ModelConfig mc = modelRepo.findById(updated.getModelConfig().getId())
                     .orElseThrow(() -> new RuntimeException("Model config not found"));
