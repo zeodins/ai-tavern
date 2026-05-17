@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>AI 酒馆 - 页面预览</title>
+<title>AI 酒馆 - 全部页面预览</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -12,7 +12,7 @@ body {
   display: flex;
   justify-content: center;
   padding: 20px;
-  gap: 16px;
+  gap: 14px;
   flex-wrap: wrap;
 }
 .phone {
@@ -27,67 +27,41 @@ body {
   position: relative;
 }
 .phone-label {
-  text-align: center;
-  font-size: 13px;
-  color: #666;
-  margin-bottom: 8px;
-  font-weight: 600;
+  text-align: center; font-size: 13px; color: #666;
+  margin-bottom: 6px; font-weight: 600;
 }
 .phone-wrap { display: flex; flex-direction: column; align-items: center; }
 
 /* TabBar */
 .tabbar {
-  display: flex;
-  background: #fff;
-  border-top: 1px solid #e5e5e5;
-  padding: 4px 0 env(safe-area-inset-bottom);
-  flex-shrink: 0;
+  display: flex; background: #fff; border-top: 1px solid #e5e5e5;
+  padding: 4px 0; flex-shrink: 0;
 }
-.tab-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 4px 0;
-  font-size: 11px;
-  color: #999;
-}
+.tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 4px 0; font-size: 11px; color: #999; }
 .tab-item.active { color: #7B68EE; }
 .tab-icon { width: 24px; height: 24px; border-radius: 4px; margin-bottom: 2px; background: #ccc; }
 .tab-item.active .tab-icon { background: #7B68EE; }
 
-/* Characters Page */
-.char-header, .model-header, .chat-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 16px;
-  flex-shrink: 0;
+/* Shared */
+.char-header, .model-header, .chat-top, .page-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 16px; flex-shrink: 0; background: #fff; border-bottom: 1px solid #eee;
 }
-.char-header { background: #fff; border-bottom: 1px solid #eee; }
-.char-title, .model-title, .chat-title { font-size: 20px; font-weight: bold; }
+.char-title, .model-title, .chat-title, .page-title { font-size: 20px; font-weight: bold; }
 .add-btn {
-  background: #7B68EE;
-  color: #fff;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 16px;
-  font-size: 13px;
-  cursor: pointer;
+  background: #7B68EE; color: #fff; border: none;
+  padding: 6px 14px; border-radius: 16px; font-size: 13px; cursor: pointer;
 }
-.char-list, .model-list {
-  flex: 1;
-  padding: 16px;
-  overflow-y: auto;
+.char-list, .model-list, .page-list {
+  flex: 1; padding: 16px; overflow-y: auto;
 }
-.char-card, .model-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  display: flex;
-  align-items: center;
+.empty-state { text-align: center; padding: 60px 0; color: #999; }
+.empty-state .icon { font-size: 48px; display: block; margin-bottom: 10px; }
+
+/* Character Card */
+.char-card {
+  background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: flex; align-items: center;
 }
 .char-avatar {
   width: 56px; height: 56px; border-radius: 50%; margin-right: 14px;
@@ -95,27 +69,37 @@ body {
   display: flex; align-items: center; justify-content: center;
   color: #fff; font-size: 22px; font-weight: bold; flex-shrink: 0;
 }
-.char-avatar.img { background: #e0e0e0; }
 .char-info { flex: 1; }
 .char-name, .model-name { font-size: 16px; font-weight: 600; }
 .char-desc { font-size: 12px; color: #999; margin-top: 2px; }
-.model-info { font-size: 13px; color: #666; margin-bottom: 2px; }
-.model-url { font-size: 12px; color: #999; }
-.card-actions { display: flex; gap: 6px; margin-top: 8px; }
+
+/* Tag chips */
+.tag-bar { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; padding: 0 16px; }
+.tag-chip { padding: 4px 12px; border-radius: 14px; font-size: 12px; background: #f0f0f0; color: #666; cursor: pointer; }
+.tag-chip.active { background: #7B68EE; color: #fff; }
+
+/* Model Card */
+.model-card {
+  background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.model-info { font-size: 13px; color: #666; margin-bottom: 2px; display: block; }
+.model-url { font-size: 12px; color: #999; display: block; }
+.card-actions { display: flex; gap: 6px; margin-top: 10px; }
 .card-actions button {
   padding: 4px 12px; border-radius: 12px; font-size: 12px;
   border: 1px solid #7B68EE; background: #fff; color: #7B68EE; cursor: pointer;
 }
 .card-actions button.warn { border-color: #e74c3c; color: #e74c3c; }
 
-/* Model Form */
+/* Form */
 .form-group { margin-bottom: 14px; }
 .form-label { display: block; font-size: 14px; color: #333; margin-bottom: 4px; }
-.form-input {
+.form-input, .form-textarea {
   width: 100%; border: 1px solid #ddd; border-radius: 8px;
   padding: 10px 12px; font-size: 15px; background: #fff; outline: none;
 }
-.form-input:focus { border-color: #7B68EE; }
+.form-textarea { height: 140px; resize: none; }
 .form-row { display: flex; gap: 10px; }
 .form-half { flex: 1; }
 .submit-btn {
@@ -127,9 +111,15 @@ body {
   padding: 12px; width: 100%; font-size: 16px; margin-top: 8px; cursor: pointer;
 }
 
-/* Chat Page */
+/* Chat */
+.chat-page-container { width: 100%; height: 100%; position: relative; display: flex; flex-direction: column; }
+.chat-overlay {
+  display: flex; flex-direction: column; height: 100%;
+  background: rgba(245, 245, 245, 0.82); flex: 1;
+}
 .chat-top {
-  padding: 12px 16px; background: #fff; border-bottom: 1px solid #eee;
+  padding: 12px 16px; display: flex; justify-content: space-between;
+  background: rgba(255,255,255,0.9); border-bottom: 1px solid #eee; flex-shrink: 0;
 }
 .chat-title { font-size: 17px; font-weight: 600; }
 .chat-body {
@@ -140,7 +130,7 @@ body {
 .bubble.assistant { justify-content: flex-start; }
 .bubble-content {
   max-width: 75%; padding: 10px 14px; border-radius: 16px;
-  font-size: 14px; line-height: 1.5;
+  font-size: 14px; line-height: 1.5; position: relative;
 }
 .bubble.user .bubble-content {
   background: #7B68EE; color: #fff; border-bottom-right-radius: 4px;
@@ -149,8 +139,15 @@ body {
   background: #fff; color: #333; border-bottom-left-radius: 4px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
+.regenerate-btn {
+  position: absolute; bottom: -10px; right: 8px;
+  width: 22px; height: 22px; background: #f0f0f0; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 12px; color: #999;
+}
+.suggestions-bar { display: flex; gap: 6px; padding: 8px 16px; flex-wrap: wrap; background: rgba(255,255,255,0.7); flex-shrink: 0; }
+.suggestion-chip { padding: 6px 14px; border-radius: 16px; font-size: 13px; background: #7B68EE; color: #fff; cursor: pointer; }
 .chat-input-bar {
-  display: flex; padding: 10px 12px; background: #fff;
+  display: flex; padding: 10px 12px; background: rgba(255,255,255,0.95);
   border-top: 1px solid #eee; align-items: center; gap: 8px; flex-shrink: 0;
 }
 .chat-input {
@@ -161,42 +158,36 @@ body {
   background: #7B68EE; color: #fff; border: none;
   border-radius: 20px; padding: 8px 18px; font-size: 14px; cursor: pointer;
 }
-.empty-state { text-align: center; padding: 60px 0; color: #999; }
-.empty-state .icon { font-size: 48px; display: block; margin-bottom: 10px; }
+
+/* Persona/Preset cards */
+.content-card {
+  background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.card-title { font-size: 17px; font-weight: 600; display: block; margin-bottom: 6px; }
+.card-content {
+  font-size: 13px; color: #666; display: block; margin-bottom: 8px;
+  white-space: pre-wrap; max-height: 60px; overflow: hidden;
+}
 </style>
 </head>
 <body>
 
-<!-- Page 1: 角色列表 -->
+<!-- 1. 角色列表页 + 标签筛选 -->
 <div class="phone-wrap">
-  <div class="phone-label">📋 角色列表页</div>
+  <div class="phone-label">🏷️ 角色列表页（新增标签筛选）</div>
   <div class="phone">
-    <div class="char-header">
-      <div class="char-title">我的角色</div>
-      <button class="add-btn">+ 导入</button>
+    <div class="char-header"><div class="char-title">我的角色</div><button class="add-btn">+ 导入</button></div>
+    <div class="tag-bar">
+      <span class="tag-chip active">全部</span>
+      <span class="tag-chip">奇幻</span>
+      <span class="tag-chip">日系</span>
+      <span class="tag-chip">科幻</span>
     </div>
     <div class="char-list">
-      <div class="char-card">
-        <div class="char-avatar">A</div>
-        <div class="char-info">
-          <div class="char-name">爱丽丝</div>
-          <div class="char-desc">温柔的邻家少女 (头像由MongoDB提供)</div>
-        </div>
-      </div>
-      <div class="char-card">
-        <div class="char-avatar">龙</div>
-        <div class="char-info">
-          <div class="char-name">龙王敖渊</div>
-          <div class="char-desc">威严的东海龙王</div>
-        </div>
-      </div>
-      <div class="char-card">
-        <div class="char-avatar">猫</div>
-        <div class="char-info">
-          <div class="char-name">小咪</div>
-          <div class="char-desc">傲娇的猫娘助手</div>
-        </div>
-      </div>
+      <div class="char-card"><div class="char-avatar">A</div><div class="char-info"><div class="char-name">爱丽丝</div><div class="char-desc">温柔的邻家少女</div></div></div>
+      <div class="char-card"><div class="char-avatar">龙</div><div class="char-info"><div class="char-name">龙王敖渊</div><div class="char-desc">威严的东海龙王</div></div></div>
+      <div class="char-card"><div class="char-avatar">猫</div><div class="char-info"><div class="char-name">小咪</div><div class="char-desc">傲娇的猫娘助手</div></div></div>
     </div>
     <div class="tabbar">
       <div class="tab-item active"><div class="tab-icon" style="background:#7B68EE"></div>角色</div>
@@ -206,68 +197,119 @@ body {
   </div>
 </div>
 
-<!-- Page 2: 对话页 -->
+<!-- 2. 聊天页（背景图 + AI建议 + 重新生成） -->
 <div class="phone-wrap">
-  <div class="phone-label">💬 对话页（流式输出）</div>
+  <div class="phone-label">💬 聊天页（背景图 + AI建议 + 重新生成）</div>
   <div class="phone">
-    <div class="chat-top">
-      <div class="chat-title">与 爱丽丝 对话</div>
-    </div>
-    <div class="chat-body">
-      <div class="bubble assistant">
-        <div class="bubble-content">你好呀，今天想聊些什么呢？</div>
+    <div class="chat-page-container">
+      <div class="chat-overlay">
+        <div class="chat-top"><div class="chat-title">与 爱丽丝 对话</div></div>
+        <div class="chat-body">
+          <div class="bubble assistant"><div class="bubble-content">你好呀，今天想聊些什么呢？</div></div>
+          <div class="bubble user"><div class="bubble-content">给我讲个故事吧</div></div>
+          <div class="bubble assistant">
+            <div class="bubble-content">
+              从前有一座小镇，镇上的图书馆藏着一本会说话的书。每当有读者翻开它……
+              <div class="regenerate-btn">↻</div>
+            </div>
+          </div>
+        </div>
+        <div class="suggestions-bar">
+          <span class="suggestion-chip">然后呢？</span>
+          <span class="suggestion-chip">换一个故事</span>
+          <span class="suggestion-chip">这本书是谁留下的</span>
+        </div>
+        <div class="chat-input-bar">
+          <input class="chat-input" placeholder="输入消息...">
+          <button class="send-btn">发送</button>
+        </div>
       </div>
-      <div class="bubble user">
-        <div class="bubble-content">给我讲个故事吧</div>
+      <div class="tabbar">
+        <div class="tab-item"><div class="tab-icon"></div>角色</div>
+        <div class="tab-item active"><div class="tab-icon" style="background:#7B68EE"></div>对话</div>
+        <div class="tab-item"><div class="tab-icon"></div>模型</div>
       </div>
-      <div class="bubble assistant">
-        <div class="bubble-content">从前有一座小镇，镇上的图书馆藏着一本会说话的书。每当有读者翻开它，书就会低声讲述一个只属于那个读者的故事...</div>
-      </div>
-    </div>
-    <div class="chat-input-bar">
-      <input class="chat-input" placeholder="输入消息...">
-      <button class="send-btn">发送</button>
-    </div>
-    <div class="tabbar">
-      <div class="tab-item"><div class="tab-icon"></div>角色</div>
-      <div class="tab-item active"><div class="tab-icon" style="background:#7B68EE"></div>对话</div>
-      <div class="tab-item"><div class="tab-icon"></div>模型</div>
     </div>
   </div>
 </div>
 
-<!-- Page 3: 模型管理 -->
+<!-- 3. 模型管理页 -->
 <div class="phone-wrap">
   <div class="phone-label">⚙️ 模型管理页</div>
   <div class="phone">
-    <div class="model-header">
-      <div class="model-title">模型配置</div>
-      <button class="add-btn">+ 添加</button>
-    </div>
+    <div class="model-header"><div class="model-title">模型配置</div><button class="add-btn">+ 添加</button></div>
     <div class="model-list">
-      <div class="model-card" style="flex-direction:column;align-items:stretch">
+      <div class="model-card">
         <div class="model-name">DeepSeek</div>
-        <div class="model-info">模型: deepseek-chat</div>
-        <div class="model-url">api.deepseek.com</div>
-        <div class="card-actions">
-          <button>编辑</button>
-          <button class="warn">删除</button>
-        </div>
+        <span class="model-info">模型: deepseek-chat</span>
+        <span class="model-url">api.deepseek.com</span>
+        <div class="card-actions"><button>编辑</button><button class="warn">删除</button></div>
       </div>
-      <div class="model-card" style="flex-direction:column;align-items:stretch">
+      <div class="model-card">
         <div class="model-name">通义千问</div>
-        <div class="model-info">模型: qwen-plus</div>
-        <div class="model-url">dashscope.aliyuncs.com</div>
-        <div class="card-actions">
-          <button>编辑</button>
-          <button class="warn">删除</button>
-        </div>
+        <span class="model-info">模型: qwen-plus</span>
+        <span class="model-url">dashscope.aliyuncs.com</span>
+        <div class="card-actions"><button>编辑</button><button class="warn">删除</button></div>
       </div>
     </div>
     <div class="tabbar">
       <div class="tab-item"><div class="tab-icon"></div>角色</div>
       <div class="tab-item"><div class="tab-icon"></div>对话</div>
       <div class="tab-item active"><div class="tab-icon" style="background:#7B68EE"></div>模型</div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. 用户人设列表页 -->
+<div class="phone-wrap">
+  <div class="phone-label">👤 用户人设管理</div>
+  <div class="phone">
+    <div class="page-header"><div class="page-title">用户人设</div><button class="add-btn">+ 添加</button></div>
+    <div class="page-list">
+      <div class="content-card">
+        <span class="card-title">冒险者</span>
+        <span class="card-content">你是来自北方王国的冒险者，擅长剑术和火魔法，正在寻找失落的传说之剑。</span>
+        <div class="card-actions"><button>编辑</button><button class="warn">删除</button></div>
+      </div>
+      <div class="content-card">
+        <span class="card-title">侦探</span>
+        <span class="card-content">你是伦敦的私家侦探，擅长推理和观察细节。</span>
+        <div class="card-actions"><button>编辑</button><button class="warn">删除</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. 人设表单页 -->
+<div class="phone-wrap">
+  <div class="phone-label">✏️ 人设表单</div>
+  <div class="phone">
+    <div class="page-header" style="justify-content:flex-start"><div class="page-title">编辑人设</div></div>
+    <div style="padding:16px">
+      <div class="form-group"><div class="form-label">名称</div><input class="form-input" value="冒险者"></div>
+      <div class="form-group"><div class="form-label">内容 (描述你是谁)</div><textarea class="form-textarea">你是来自北方王国的冒险者，擅长剑术和火魔法，正在寻找失落的传说之剑。</textarea></div>
+      <button class="submit-btn">保存</button>
+      <button class="delete-btn">删除</button>
+    </div>
+  </div>
+</div>
+
+<!-- 6. 预设管理页 -->
+<div class="phone-wrap">
+  <div class="phone-label">📋 系统预设管理</div>
+  <div class="phone">
+    <div class="page-header"><div class="page-title">系统预设</div><button class="add-btn">+ 添加</button></div>
+    <div class="page-list">
+      <div class="content-card">
+        <span class="card-title">角色扮演助手</span>
+        <span class="card-content">你是一个专业的角色扮演AI助手，始终保持角色设定，使用符合角色身份的语言风格回复。不要跳出角色设定。</span>
+        <div class="card-actions"><button>编辑</button><button class="warn">删除</button></div>
+      </div>
+      <div class="content-card">
+        <span class="card-title">简洁回复</span>
+        <span class="card-content">保持回复简洁有力，每句话不超过30字。</span>
+        <div class="card-actions"><button>编辑</button><button class="warn">删除</button></div>
+      </div>
     </div>
   </div>
 </div>
