@@ -1,0 +1,53 @@
+{
+    "pages": [
+        {
+            "path": "pages/characters/characters",
+            "style": {
+                "navigationBarTitleText": "角色"
+            }
+        },
+        {
+            "path": "pages/chat/chat",
+            "style": {
+                "navigationBarTitleText": "对话"
+            }
+        },
+        {
+            "path": "pages/models/models",
+            "style": {
+                "navigationBarTitleText": "模型"
+            }
+        }
+    ],
+    "tabBar": {
+        "color": "#999999",
+        "selectedColor": "#7B68EE",
+        "borderStyle": "black",
+        "list": [
+            {
+                "pagePath": "pages/characters/characters",
+                "text": "角色",
+                "iconPath": "static/tab-characters.png",
+                "selectedIconPath": "static/tab-characters-active.png"
+            },
+            {
+                "pagePath": "pages/chat/chat",
+                "text": "对话",
+                "iconPath": "static/tab-chat.png",
+                "selectedIconPath": "static/tab-chat-active.png"
+            },
+            {
+                "pagePath": "pages/models/models",
+                "text": "模型",
+                "iconPath": "static/tab-models.png",
+                "selectedIconPath": "static/tab-models-active.png"
+            }
+        ]
+    },
+    "globalStyle": {
+        "navigationBarTextStyle": "black",
+        "navigationBarTitleText": "AI 酒馆",
+        "backgroundColor": "#F8F8F8"
+    },
+    "uniIdRouter": {}
+}
