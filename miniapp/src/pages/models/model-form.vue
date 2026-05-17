@@ -110,10 +110,10 @@ async function handleDelete() {
 <style scoped>
 .container { padding: 16px; }
 .form-group { margin-bottom: 16px; }
-.label { display: block; font-size: 14px; color: #333; margin-bottom: 6px; }
-.input { border: 1px solid #ddd; border-radius: 8px; padding: 10px 12px; font-size: 15px; background: #fff; }
+.label { display: block; font-size: 14px; color: #3D4A46; margin-bottom: 6px; }
+.input { border: 1px solid #E8EEEA; border-radius: 8px; padding: 10px 12px; font-size: 15px; background: #fff; }
 .form-row { display: flex; gap: 12px; }
 .half { flex: 1; }
-.submit-btn { background: #7B68EE; color: #fff; border: none; margin-top: 20px; border-radius: 8px; padding: 12px; }
-.delete-btn { background: #e74c3c; color: #fff; border: none; border-radius: 8px; padding: 12px; margin-top: 10px; }
+.submit-btn { background: #7CB9A8; color: #fff; border: none; margin-top: 20px; border-radius: 12px; padding: 12px; }
+.delete-btn { background: #e74c3c; color: #fff; border: none; border-radius: 12px; padding: 12px; margin-top: 10px; }
 </style>

@@ -123,10 +123,10 @@ async function confirmDelete(char) {
 .container { padding: 16px; }
 .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .title { font-size: 20px; font-weight: bold; }
-.add-btn { background-color: #7B68EE; color: #fff; border: none; }
-.empty { text-align: center; padding: 60px 0; color: #999; }
+.add-btn { background-color: #7CB9A8; color: #fff; border: none; }
+.empty { text-align: center; padding: 60px 0; color: #B0C3BA; }
 .empty-icon { font-size: 48px; display: block; margin-bottom: 10px; }
 .tag-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-.tag-chip { padding: 4px 12px; border-radius: 14px; font-size: 12px; background: #f0f0f0; color: #666; }
-.tag-active { background: #7B68EE; color: #fff; }
+.tag-chip { padding: 4px 12px; border-radius: 14px; font-size: 12px; background: #f0f0f0; color: #92A69E; }
+.tag-active { background: #7CB9A8; color: #fff; }
 </style>

@@ -34,10 +34,10 @@ async function handleDelete(id) {
 .container { padding: 16px; }
 .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .title { font-size: 20px; font-weight: bold; }
-.add-btn { background-color: #7B68EE; color: #fff; border: none; }
-.empty { text-align: center; padding: 40px 0; color: #999; }
-.card { background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.add-btn { background-color: #7CB9A8; color: #fff; border: none; }
+.empty { text-align: center; padding: 40px 0; color: #B0C3BA; }
+.card { background: #fff; border-radius: 18px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(60,80,70,0.06); }
 .card-title { font-size: 17px; font-weight: 600; display: block; margin-bottom: 6px; }
-.card-content { font-size: 13px; color: #666; display: block; margin-bottom: 8px; white-space: pre-wrap; max-height: 80px; overflow: hidden; }
+.card-content { font-size: 13px; color: #92A69E; display: block; margin-bottom: 8px; white-space: pre-wrap; max-height: 80px; overflow: hidden; }
 .card-actions { display: flex; gap: 8px; }
 </style>

@@ -175,14 +175,14 @@ function handleRegenerate() {
 
 <style scoped>
 .page-container { width: 100%; height: 100vh; }
-.chat-overlay { display: flex; flex-direction: column; height: 100%; background: rgba(245, 245, 245, 0.85); }
-.top-bar { padding: 12px 16px; background: rgba(255,255,255,0.9); border-bottom: 1px solid #eee; }
+.chat-overlay { display: flex; flex-direction: column; height: 100%; background: rgba(248,250,249,0.88); }
+.top-bar { padding: 12px 16px; background: rgba(255,255,255,0.9); border-bottom: 1px solid #E8EEEA; }
 .char-name { font-size: 17px; font-weight: 600; }
 .message-list { flex: 1; padding: 16px; overflow-y: auto; }
-.empty-chat { text-align: center; padding: 80px 0; color: #999; }
+.empty-chat { text-align: center; padding: 80px 0; color: #B0C3BA; }
 .suggestions-bar { display: flex; gap: 8px; padding: 8px 16px; flex-wrap: wrap; background: rgba(255,255,255,0.7); }
-.suggestion-chip { padding: 6px 14px; border-radius: 16px; font-size: 13px; background: #7B68EE; color: #fff; }
-.input-bar { display: flex; padding: 10px 12px; background: rgba(255,255,255,0.95); border-top: 1px solid #eee; align-items: center; gap: 8px; }
-.msg-input { flex: 1; border: 1px solid #ddd; border-radius: 20px; padding: 8px 16px; font-size: 15px; background: #f5f5f5; }
-.send-btn { background: #7B68EE; color: #fff; border: none; border-radius: 20px; padding: 6px 16px; }
+.suggestion-chip { padding: 6px 14px; border-radius: 16px; font-size: 13px; background: #7CB9A8; color: #fff; }
+.input-bar { display: flex; padding: 10px 12px; background: rgba(255,255,255,0.95); border-top: 1px solid #E8EEEA; align-items: center; gap: 8px; }
+.msg-input { flex: 1; border: 1px solid #E8EEEA; border-radius: 20px; padding: 8px 16px; font-size: 15px; background: #F4F7F6; }
+.send-btn { background: #7CB9A8; color: #fff; border: none; border-radius: 20px; padding: 6px 16px; }
 </style>

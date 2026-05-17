@@ -60,12 +60,12 @@ async function handleDelete(id) {
 .container { padding: 16px; }
 .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .title { font-size: 20px; font-weight: bold; }
-.add-btn { background-color: #7B68EE; color: #fff; border: none; }
-.empty { text-align: center; padding: 40px 0; color: #999; }
-.model-card { background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.add-btn { background-color: #7CB9A8; color: #fff; border: none; }
+.empty { text-align: center; padding: 40px 0; color: #B0C3BA; }
+.model-card { background: #fff; border-radius: 18px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(60,80,70,0.06); }
 .card-header { margin-bottom: 8px; }
 .model-name { font-size: 17px; font-weight: 600; }
-.model-info { display: block; font-size: 13px; color: #666; margin-bottom: 4px; }
-.model-url { display: block; font-size: 12px; color: #999; }
+.model-info { display: block; font-size: 13px; color: #92A69E; margin-bottom: 4px; }
+.model-url { display: block; font-size: 12px; color: #B0C3BA; }
 .card-actions { display: flex; gap: 8px; margin-top: 12px; }
 </style>
