@@ -7,6 +7,30 @@
             }
         },
         {
+            "path": "pages/personas/personas",
+            "style": {
+                "navigationBarTitleText": "人设管理"
+            }
+        },
+        {
+            "path": "pages/personas/persona-form",
+            "style": {
+                "navigationBarTitleText": "人设"
+            }
+        },
+        {
+            "path": "pages/presets/presets",
+            "style": {
+                "navigationBarTitleText": "预设管理"
+            }
+        },
+        {
+            "path": "pages/presets/preset-form",
+            "style": {
+                "navigationBarTitleText": "预设"
+            }
+        },
+        {
             "path": "pages/characters/characters",
             "style": {
                 "navigationBarTitleText": "角色"

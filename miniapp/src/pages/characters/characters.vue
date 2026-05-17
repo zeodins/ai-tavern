@@ -5,6 +5,11 @@
       <button class="add-btn" @click="handleImport" size="mini">+ 导入</button>
     </view>
 
+    <view v-if="allTags.length > 0" class="tag-bar">
+      <text :class="['tag-chip', !selectedTag ? 'tag-active' : '']" @click="filterByTag('')">全部</text>
+      <text v-for="tag in allTags" :key="tag" :class="['tag-chip', selectedTag === tag ? 'tag-active' : '']" @click="filterByTag(tag)">{{ tag }}</text>
+    </view>
+
     <view v-if="characters.length === 0" class="empty">
       <text class="empty-icon">🎭</text>
       <text>还没有角色，点击上方导入角色卡</text>
@@ -31,6 +36,9 @@ import { listModels } from '@/api/model'
 const BASE_URL = 'http://localhost:8080'
 
 const characters = ref([])
+const allCharacters = ref([])
+const allTags = ref([])
+const selectedTag = ref('')
 
 function getAvatarUrl(char) {
   if (char.avatarId) {
@@ -45,9 +53,28 @@ onMounted(() => {
 
 async function loadCharacters() {
   try {
-    characters.value = await listCharacters()
+    const list = await listCharacters()
+    allCharacters.value = list
+    // Build tag set
+    const tagSet = new Set()
+    list.forEach(c => {
+      if (c.tags) {
+        c.tags.split(',').forEach(t => { const trimmed = t.trim(); if (trimmed) tagSet.add(trimmed) })
+      }
+    })
+    allTags.value = Array.from(tagSet)
+    filterByTag(selectedTag.value)
   } catch (e) {
     uni.showToast({ title: '加载失败', icon: 'none' })
+  }
+}
+
+function filterByTag(tag) {
+  selectedTag.value = tag
+  if (!tag) {
+    characters.value = allCharacters.value
+  } else {
+    characters.value = allCharacters.value.filter(c => c.tags && c.tags.split(',').map(t => t.trim()).includes(tag))
   }
 }
 
@@ -99,4 +126,7 @@ async function confirmDelete(char) {
 .add-btn { background-color: #7B68EE; color: #fff; border: none; }
 .empty { text-align: center; padding: 60px 0; color: #999; }
 .empty-icon { font-size: 48px; display: block; margin-bottom: 10px; }
+.tag-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.tag-chip { padding: 4px 12px; border-radius: 14px; font-size: 12px; background: #f0f0f0; color: #666; }
+.tag-active { background: #7B68EE; color: #fff; }
 </style>
