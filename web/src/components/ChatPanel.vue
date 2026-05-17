@@ -33,7 +33,7 @@
 
       <div class="input-row">
         <el-input v-model="input" placeholder="输入消息..." @keyup.enter="handleSend" :disabled="streaming" size="default" />
-        <el-button type="primary" @click="handleSend" :disabled="!input.trim() || streaming" :icon="Promotion">发送</el-button>
+        <el-button type="primary" @click="handleSend" :disabled="!input.trim() || streaming" :icon="ChatDotRound">发送</el-button>
       </div>
     </div>
   </div>
@@ -41,7 +41,7 @@
 
 <script setup>
 import { ref, watch, nextTick, computed, onMounted } from 'vue'
-import { Promotion } from '@element-plus/icons-vue'
+import { ChatDotRound } from '@element-plus/icons-vue'
 import ChatBubble from './ChatBubble.vue'
 import { sendMessage, getHistory, regenerateMessage, getSuggestions } from '../api/chat'
 import { getCharacter } from '../api/character'

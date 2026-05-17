@@ -22,24 +22,14 @@ import CharacterSidebar from '../components/CharacterSidebar.vue'
 import ChatPanel from '../components/ChatPanel.vue'
 import ToolsSidebar from '../components/ToolsSidebar.vue'
 
-const characters = ref([])
-const selectedCharacterId = ref(null)
-
-const selectedCharacter = computed(() =>
-  characters.value.find(c => c.id === selectedCharacterId.value) || null
-)
+const selectedCharacter = ref(null)
+const selectedCharacterId = computed(() => selectedCharacter.value?.id || null)
 
 function onSelectCharacter(character) {
-  selectedCharacterId.value = character.id
-  characters.value = characters.value.map(c => ({
-    ...c,
-    _selected: c.id === character.id
-  }))
+  selectedCharacter.value = character
 }
 
-function loadCharacters() {
-  // CharacterSidebar handles its own loading; this is for parent coordination
-}
+function loadCharacters() {}
 </script>
 
 <style scoped>

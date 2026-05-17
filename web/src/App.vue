@@ -4,11 +4,10 @@
 
 <script setup>
 import { onMounted } from 'vue'
-import { getCurrentTheme, applyTheme } from './theme'
+import { getCurrentTheme, applyTheme, getThemeName } from './theme'
 
 onMounted(() => {
-  const theme = getCurrentTheme()
-  applyTheme(theme.name ? getThemeName() : 'mint')
+  applyTheme(getThemeName())
 })
 </script>
 
