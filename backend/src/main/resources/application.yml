@@ -19,6 +19,11 @@ spring:
       mode: always
       schema-locations: classpath:schema.sql
   data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 3000ms
+      connect-timeout: 3000ms
     mongodb:
       uri: mongodb://localhost:27017/ai_tavern
   servlet:

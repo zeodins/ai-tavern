@@ -10,6 +10,7 @@ import com.aitavern.repository.ChatMessageRepository;
 import com.aitavern.repository.ModelConfigRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.time.Duration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,23 +39,47 @@ public class ChatService {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public ChatService(CharacterRepository characterRepo, ModelConfigRepository modelRepo,
                        ChatMessageRepository messageRepo, PersonaService personaService,
-                       LorebookService lorebookService) {
+                       LorebookService lorebookService, RedisTemplate<String, Object> redisTemplate) {
         this.characterRepo = characterRepo;
         this.modelRepo = modelRepo;
         this.messageRepo = messageRepo;
         this.personaService = personaService;
         this.lorebookService = lorebookService;
+        this.redisTemplate = redisTemplate;
     }
 
     public List<ChatMessage> getHistory(Long characterId) {
-        return messageRepo.findByCharacterIdOrderByCreatedAtAsc(characterId);
+        String key = "chat:history:" + characterId;
+        try {
+            @SuppressWarnings("unchecked")
+            List<ChatMessage> cached = (List<ChatMessage>) redisTemplate.opsForValue().get(key);
+            if (cached != null) {
+                return cached;
+            }
+        } catch (Exception e) {
+            // Redis unavailable, fall through to DB
+        }
+
+        List<ChatMessage> history = messageRepo.findByCharacterIdOrderByCreatedAtAsc(characterId);
+
+        try {
+            redisTemplate.opsForValue().set(key, history, Duration.ofMinutes(10));
+        } catch (Exception e) {
+            // Redis unavailable, skip caching
+        }
+
+        return history;
     }
 
     public void clearHistory(Long characterId) {
         messageRepo.deleteByCharacterId(characterId);
+        try {
+            redisTemplate.delete("chat:history:" + characterId);
+        } catch (Exception ignored) {}
     }
 
     public SseEmitter chat(Long characterId, String userMessage, Long modelConfigId) {
@@ -169,6 +195,10 @@ public class ChatService {
                     assistantMsg.setContent(fullContent.toString());
                     messageRepo.save(assistantMsg);
                     messageRepo.save(userMsg);
+                    // Invalidate Redis cache
+                    try {
+                        redisTemplate.delete("chat:history:" + character.getId());
+                    } catch (Exception ignored) {}
                 }
 
                 emitter.send(SseEmitter.event().name("done").data(""));
