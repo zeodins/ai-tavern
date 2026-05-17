@@ -3,7 +3,7 @@
     <view :class="['content', role === 'user' ? 'content-user' : 'content-assistant']">
       <text>{{ text }}</text>
       <view v-if="showRegenerate && role === 'assistant'" class="regenerate-btn" @click.stop="$emit('regenerate')">
-        <text class="regenerate-icon">&#x21BB;</text>
+        <text class="regenerate-icon">↻</text>
       </view>
     </view>
   </view>
@@ -19,12 +19,12 @@ defineEmits(['regenerate'])
 </script>
 
 <style scoped>
-.bubble { display: flex; margin-bottom: 16px; }
+.bubble { display: flex; margin-bottom: 12px; }
 .bubble-user { justify-content: flex-end; }
 .bubble-assistant { justify-content: flex-start; }
-.content { max-width: 75%; padding: 12px 16px; border-radius: 16px; font-size: 15px; line-height: 1.5; position: relative; }
-.content-user { background: #7B68EE; color: #fff; border-bottom-right-radius: 4px; }
-.content-assistant { background: #fff; color: #333; border-bottom-left-radius: 4px; }
-.regenerate-btn { position: absolute; bottom: -8px; right: 8px; width: 24px; height: 24px; background: #f0f0f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-.regenerate-icon { font-size: 14px; color: #999; }
+.content { max-width: 78%; padding: 11px 15px; border-radius: 18px; font-size: 14px; line-height: 1.55; position: relative; }
+.content-user { background: #7CB9A8; color: #fff; border-bottom-right-radius: 6px; }
+.content-assistant { background: #fff; color: #3D4A46; border-bottom-left-radius: 6px; box-shadow: 0 1px 2px rgba(60,80,70,0.04); }
+.regenerate-btn { position: absolute; bottom: -8px; right: 10px; width: 24px; height: 24px; background: #F4F7F6; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #E8EEEA; }
+.regenerate-icon { font-size: 12px; color: #B0C3BA; }
 </style>

@@ -51,7 +51,7 @@
     ],
     "tabBar": {
         "color": "#999999",
-        "selectedColor": "#7B68EE",
+        "selectedColor": "#7CB9A8",
         "borderStyle": "black",
         "list": [
             {
@@ -77,7 +77,7 @@
     "globalStyle": {
         "navigationBarTextStyle": "black",
         "navigationBarTitleText": "AI 酒馆",
-        "backgroundColor": "#F8F8F8"
+        "backgroundColor": "#F4F7F6"
     },
     "uniIdRouter": {}
 }
