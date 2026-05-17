@@ -37,7 +37,7 @@
 import { ref, onMounted } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { listPresets, getPreset, createPreset, updatePreset, deletePreset, togglePreset } from '../api/preset'
-import http from '../api/request'
+import { applyPreset } from '../api/character'
 import { ElMessage } from 'element-plus'
 
 const props = defineProps({ characterId: Number })
@@ -80,7 +80,7 @@ async function handleToggle(preset) {
 
 async function handleApplyToCharacter(presetId) {
   try {
-    await http.put(`/characters/${props.characterId}/preset`, { presetId })
+    await applyPreset(props.characterId, presetId)
     ElMessage.success('已应用至角色')
   } catch(e) { ElMessage.error('应用失败') }
 }
