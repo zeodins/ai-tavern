@@ -3,6 +3,7 @@ package com.aitavern.service;
 import com.aitavern.entity.CharacterEntity;
 import com.aitavern.entity.ChatMessage;
 import com.aitavern.entity.ModelConfig;
+import com.aitavern.entity.UserPersona;
 import com.aitavern.repository.CharacterRepository;
 import com.aitavern.repository.ChatMessageRepository;
 import com.aitavern.repository.ModelConfigRepository;
@@ -29,15 +30,17 @@ public class ChatService {
     private final CharacterRepository characterRepo;
     private final ModelConfigRepository modelRepo;
     private final ChatMessageRepository messageRepo;
+    private final PersonaService personaService;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private final HttpClient httpClient = HttpClient.newHttpClient();
 
     public ChatService(CharacterRepository characterRepo, ModelConfigRepository modelRepo,
-                       ChatMessageRepository messageRepo) {
+                       ChatMessageRepository messageRepo, PersonaService personaService) {
         this.characterRepo = characterRepo;
         this.modelRepo = modelRepo;
         this.messageRepo = messageRepo;
+        this.personaService = personaService;
     }
 
     public List<ChatMessage> getHistory(Long characterId) {
@@ -175,6 +178,17 @@ public class ChatService {
         for (int i = start; i < history.size(); i++) {
             ChatMessage msg = history.get(i);
             messages.add(Map.of("role", msg.getRole(), "content", msg.getContent()));
+        }
+
+        // Inject active user persona
+        UserPersona persona = personaService.getActive();
+        if (persona != null && persona.getContent() != null && !persona.getContent().isEmpty()) {
+            if (messages.isEmpty()) {
+                messages.add(Map.of("role", "system", "content", "[User Persona]\nYou are: " + persona.getContent()));
+            } else {
+                messages.set(0, Map.of("role", "system", "content",
+                    messages.get(0).get("content") + "\n\n[User Persona]\nYou are: " + persona.getContent()));
+            }
         }
 
         return messages;
