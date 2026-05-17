@@ -34,3 +34,6 @@ CREATE TABLE IF NOT EXISTS chat_messages (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
 );
+
+CREATE INDEX idx_characters_model_config_id ON characters(model_config_id);
+CREATE INDEX idx_chat_messages_character_id ON chat_messages(character_id);

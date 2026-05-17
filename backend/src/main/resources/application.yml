@@ -24,4 +24,4 @@ spring:
       max-request-size: 10MB
 
 app:
-  upload-dir: ./uploads/avatars
+  upload-dir: ${user.home}/ai-tavern/uploads/avatars

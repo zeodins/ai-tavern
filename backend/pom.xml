@@ -8,7 +8,7 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.5</version>
     </parent>
-    <groupId>com.aittaven</groupId>
+    <groupId>com.aitavern</groupId>
     <artifactId>ai-tavern-backend</artifactId>
     <version>0.1.0</version>
     <name>AI Tavern Backend</name>
