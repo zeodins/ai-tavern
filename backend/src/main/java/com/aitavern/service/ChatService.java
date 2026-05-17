@@ -2,6 +2,7 @@ package com.aitavern.service;
 
 import com.aitavern.entity.CharacterEntity;
 import com.aitavern.entity.ChatMessage;
+import com.aitavern.entity.LorebookEntry;
 import com.aitavern.entity.ModelConfig;
 import com.aitavern.entity.UserPersona;
 import com.aitavern.repository.CharacterRepository;
@@ -31,16 +32,19 @@ public class ChatService {
     private final ModelConfigRepository modelRepo;
     private final ChatMessageRepository messageRepo;
     private final PersonaService personaService;
+    private final LorebookService lorebookService;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private final HttpClient httpClient = HttpClient.newHttpClient();
 
     public ChatService(CharacterRepository characterRepo, ModelConfigRepository modelRepo,
-                       ChatMessageRepository messageRepo, PersonaService personaService) {
+                       ChatMessageRepository messageRepo, PersonaService personaService,
+                       LorebookService lorebookService) {
         this.characterRepo = characterRepo;
         this.modelRepo = modelRepo;
         this.messageRepo = messageRepo;
         this.personaService = personaService;
+        this.lorebookService = lorebookService;
     }
 
     public List<ChatMessage> getHistory(Long characterId) {
@@ -75,6 +79,28 @@ public class ChatService {
         executor.execute(() -> {
             try {
                 List<Map<String, String>> messages = buildMessages(character);
+
+                // Inject lorebook entries matching user message
+                List<LorebookEntry> matched = lorebookService.findMatching(character.getId(), userMessage);
+                if (!matched.isEmpty()) {
+                    StringBuilder loreContext = new StringBuilder("[Relevant world knowledge]\n");
+                    for (LorebookEntry entry : matched) {
+                        loreContext.append("- ").append(entry.getContent()).append("\n");
+                    }
+                    messages.add(Map.of("role", "system", "content", loreContext.toString()));
+                }
+
+                // Inject author's note at ~70% depth
+                if (character.getAuthorNote() != null && !character.getAuthorNote().isEmpty()) {
+                    int depthIdx = (int)(messages.size() * 0.7);
+                    Map<String, String> note = Map.of("role", "system", "content", "[Author's Note: " + character.getAuthorNote() + "]");
+                    if (depthIdx < messages.size()) {
+                        messages.add(depthIdx, note);
+                    } else {
+                        messages.add(note);
+                    }
+                }
+
                 messages.add(Map.of("role", "user", "content", userMessage));
 
                 String requestBody = objectMapper.writeValueAsString(Map.of(

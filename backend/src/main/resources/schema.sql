@@ -99,3 +99,25 @@ SET @sql_bg_id = IF(
 PREPARE stmt FROM @sql_bg_id;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
+
+CREATE TABLE IF NOT EXISTS lorebook_entries (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    character_id BIGINT NOT NULL,
+    `keys` VARCHAR(500) NOT NULL,
+    content TEXT NOT NULL,
+    enabled BOOLEAN DEFAULT TRUE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
+);
+
+-- Idempotent index
+SET @sql_lorebook_idx = IF(
+    (SELECT COUNT(*) FROM information_schema.statistics
+     WHERE table_schema = DATABASE() AND table_name = 'lorebook_entries' AND index_name = 'idx_lorebook_character_id') = 0,
+    'CREATE INDEX idx_lorebook_character_id ON lorebook_entries(character_id)',
+    'SELECT 1'
+);
+PREPARE stmt FROM @sql_lorebook_idx;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
