@@ -2,8 +2,10 @@ package com.aitavern.controller;
 
 import com.aitavern.entity.BackgroundImage;
 import com.aitavern.entity.CharacterEntity;
+import com.aitavern.entity.SystemPreset;
 import com.aitavern.service.BackgroundImageService;
 import com.aitavern.service.CharacterService;
+import com.aitavern.service.SystemPresetService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,10 +18,12 @@ public class CharacterController {
 
     private final CharacterService service;
     private final BackgroundImageService backgroundImageService;
+    private final SystemPresetService presetService;
 
-    public CharacterController(CharacterService service, BackgroundImageService backgroundImageService) {
+    public CharacterController(CharacterService service, BackgroundImageService backgroundImageService, SystemPresetService presetService) {
         this.service = service;
         this.backgroundImageService = backgroundImageService;
+        this.presetService = presetService;
     }
 
     @GetMapping
@@ -47,6 +51,17 @@ public class CharacterController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         service.delete(id);
+    }
+
+    @PutMapping("/{id}/apply-preset/{presetId}")
+    public CharacterEntity applyPreset(@PathVariable Long id, @PathVariable Long presetId) {
+        CharacterEntity character = service.getById(id);
+        SystemPreset preset = presetService.getById(presetId);
+        String currentPrompt = character.getSystemPrompt() != null ? character.getSystemPrompt() : "";
+        if (!currentPrompt.contains(preset.getContent())) {
+            character.setSystemPrompt(currentPrompt + "\n\n" + preset.getContent());
+        }
+        return service.update(id, character);
     }
 
     @PutMapping("/{id}/background")

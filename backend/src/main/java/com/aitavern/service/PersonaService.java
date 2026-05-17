@@ -3,6 +3,7 @@ package com.aitavern.service;
 import com.aitavern.entity.UserPersona;
 import com.aitavern.repository.UserPersonaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -40,6 +41,14 @@ public class PersonaService {
     }
 
     public UserPersona getActive() {
-        return repo.findFirstByOrderByCreatedAtDesc().orElse(null);
+        return repo.findByIsActiveTrue().orElse(null);
+    }
+
+    @Transactional
+    public void activate(Long id) {
+        repo.findAll().forEach(p -> p.setIsActive(false));
+        UserPersona target = getById(id);
+        target.setIsActive(true);
+        repo.save(target);
     }
 }

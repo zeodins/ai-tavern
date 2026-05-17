@@ -38,4 +38,14 @@ public class SystemPresetService {
     public void delete(Long id) {
         repo.deleteById(id);
     }
+
+    public void toggleActive(Long id) {
+        SystemPreset p = getById(id);
+        p.setIsActive(!Boolean.TRUE.equals(p.getIsActive()));
+        repo.save(p);
+    }
+
+    public List<SystemPreset> getActivePresets() {
+        return repo.findByIsActiveTrue();
+    }
 }

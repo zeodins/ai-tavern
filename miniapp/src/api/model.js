@@ -30,3 +30,7 @@ export function deleteModel(id) {
     method: 'DELETE'
   })
 }
+
+export function activateModel(id) {
+  return request({ url: `/models/${id}/activate`, method: 'PUT' })
+}

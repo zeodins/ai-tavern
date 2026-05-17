@@ -111,6 +111,34 @@ CREATE TABLE IF NOT EXISTS lorebook_entries (
     FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
 );
 
+-- Add is_active columns to model_configs, user_personas, system_presets (idempotent)
+SET @sql_mc_active = IF(
+    (SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = 'model_configs' AND column_name = 'is_active') = 0,
+    'ALTER TABLE model_configs ADD COLUMN is_active BOOLEAN DEFAULT FALSE',
+    'SELECT 1'
+);
+PREPARE stmt FROM @sql_mc_active;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @sql_up_active = IF(
+    (SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = 'user_personas' AND column_name = 'is_active') = 0,
+    'ALTER TABLE user_personas ADD COLUMN is_active BOOLEAN DEFAULT FALSE',
+    'SELECT 1'
+);
+PREPARE stmt FROM @sql_up_active;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @sql_sp_active = IF(
+    (SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = 'system_presets' AND column_name = 'is_active') = 0,
+    'ALTER TABLE system_presets ADD COLUMN is_active BOOLEAN DEFAULT FALSE',
+    'SELECT 1'
+);
+PREPARE stmt FROM @sql_sp_active;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
 -- Idempotent index
 SET @sql_lorebook_idx = IF(
     (SELECT COUNT(*) FROM information_schema.statistics

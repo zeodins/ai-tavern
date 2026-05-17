@@ -40,4 +40,9 @@ public class PersonaController {
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
+
+    @PutMapping("/{id}/activate")
+    public void activate(@PathVariable Long id) {
+        service.activate(id);
+    }
 }

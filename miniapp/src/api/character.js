@@ -30,3 +30,7 @@ export function deleteCharacter(id) {
     method: 'DELETE'
   })
 }
+
+export function applyPreset(characterId, presetId) {
+  return request({ url: `/characters/${characterId}/apply-preset/${presetId}`, method: 'PUT' })
+}

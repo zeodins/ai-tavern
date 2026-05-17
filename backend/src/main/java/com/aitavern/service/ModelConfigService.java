@@ -3,6 +3,7 @@ package com.aitavern.service;
 import com.aitavern.entity.ModelConfig;
 import com.aitavern.repository.ModelConfigRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -41,5 +42,13 @@ public class ModelConfigService {
 
     public void delete(Long id) {
         repo.deleteById(id);
+    }
+
+    @Transactional
+    public void activate(Long id) {
+        repo.findAll().forEach(m -> m.setIsActive(false));
+        ModelConfig target = getById(id);
+        target.setIsActive(true);
+        repo.save(target);
     }
 }

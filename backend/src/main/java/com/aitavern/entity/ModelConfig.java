@@ -30,6 +30,9 @@ public class ModelConfig {
     @Column(name = "max_tokens")
     private Integer maxTokens = 2048;
 
+    @Column(name = "is_active")
+    private Boolean isActive = false;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
@@ -74,4 +77,7 @@ public class ModelConfig {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    public Boolean getIsActive() { return isActive; }
+    public void setIsActive(Boolean isActive) { this.isActive = isActive; }
 }

@@ -40,4 +40,9 @@ public class SystemPresetController {
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
+
+    @PutMapping("/{id}/toggle")
+    public void toggle(@PathVariable Long id) {
+        service.toggleActive(id);
+    }
 }
