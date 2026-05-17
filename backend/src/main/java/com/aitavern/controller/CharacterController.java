@@ -1,6 +1,8 @@
 package com.aitavern.controller;
 
+import com.aitavern.entity.BackgroundImage;
 import com.aitavern.entity.CharacterEntity;
+import com.aitavern.service.BackgroundImageService;
 import com.aitavern.service.CharacterService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,9 +15,11 @@ import java.util.List;
 public class CharacterController {
 
     private final CharacterService service;
+    private final BackgroundImageService backgroundImageService;
 
-    public CharacterController(CharacterService service) {
+    public CharacterController(CharacterService service, BackgroundImageService backgroundImageService) {
         this.service = service;
+        this.backgroundImageService = backgroundImageService;
     }
 
     @GetMapping
@@ -43,5 +47,13 @@ public class CharacterController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         service.delete(id);
+    }
+
+    @PutMapping("/{id}/background")
+    public CharacterEntity setBackground(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
+        CharacterEntity character = service.getById(id);
+        BackgroundImage bg = backgroundImageService.store(file.getBytes(), file.getContentType() != null ? file.getContentType() : "image/jpeg");
+        character.setBackgroundId(bg.getId());
+        return service.update(id, character);
     }
 }
