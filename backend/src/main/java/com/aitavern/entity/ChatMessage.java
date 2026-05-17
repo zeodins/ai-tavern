@@ -13,7 +13,7 @@ public class ChatMessage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id", nullable = false)
-    private Character character;
+    private CharacterEntity character;
 
     @Column(nullable = false, length = 20)
     private String role;
@@ -33,8 +33,8 @@ public class ChatMessage {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Character getCharacter() { return character; }
-    public void setCharacter(Character character) { this.character = character; }
+    public CharacterEntity getCharacter() { return character; }
+    public void setCharacter(CharacterEntity character) { this.character = character; }
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
